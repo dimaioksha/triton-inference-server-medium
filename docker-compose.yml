@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+
+  triton_server:
+    build:
+      context: ./
+      dockerfile: triton_server/Dockerfile
+    command: tritonserver --model-repository /opt/triton_models
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    volumes:
+      - model_weights_volume:/services/models
+      - ./triton_server:/opt/triton_models
+    environment:
+      - TORCH_HOME=/services/models
+      - YOLOV5_CONFIG_DIR=/services/models/configs
+    shm_size: '1gb'
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    networks:
+      - web
+
+  triton_client:
+    build:
+      context: .
+      dockerfile: triton_client/Dockerfile
+      target: triton-client
+    volumes:
+      - ./triton_client:/workspace/triton_client
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
+
+volumes:
+  model_weights_volume:
+    name: model_weights_volume
