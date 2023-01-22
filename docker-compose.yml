@@ -4,7 +4,7 @@ services:
 
   triton_server:
     build:
-      context: ./
+      context: .
       dockerfile: triton_server/Dockerfile
     command: tritonserver --model-repository /opt/triton_models
     ports:
