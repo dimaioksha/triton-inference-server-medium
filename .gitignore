@@ -2,3 +2,4 @@ __pycache__
 *.jpg
 *.png
 client_testing.py
+.DS_Store
