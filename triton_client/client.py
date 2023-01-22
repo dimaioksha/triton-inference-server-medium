@@ -124,5 +124,6 @@ if __name__ == "__main__":
     request = client.send_task(two_images_preprocessed)
     result = client.get_task_result(request)
     print(f"OUTPUT0_DATA: {result}, shape: {result.shape}")
+    client.close()
 
 
