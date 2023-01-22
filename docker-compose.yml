@@ -36,7 +36,7 @@ services:
 
 networks:
   web:
-    external: true
+    name: web
 
 volumes:
   model_weights_volume:
