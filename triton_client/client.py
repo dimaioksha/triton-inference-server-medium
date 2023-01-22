@@ -104,11 +104,14 @@ if __name__ == "__main__":
     client = TritonClient(model_name="yolov5",
                           url="triton_server:8000",
                           concurrency=10)
-    img = np.asarray(Image.open("./2_faces.jpeg"))
-    img_daun = img + np.random.normal(size=img.shape, loc=50, scale=1)
-    two_images_same = np.array([np.asarray(Image.open("./2_faces.jpeg")),
-                                np.asarray(Image.open("./2_faces.jpeg"))])
-    two_images_crazy = np.array([img, img_daun])
+    np.random.seed(10)
+    # You have to change this path to image you would like to test inference with
+    path_to_example_image = "./2_faces.jpeg"
+    img = np.asarray(Image.open(path_to_example_image))
+    img_preprocessed = img + np.random.normal(size=img.shape, loc=50, scale=1)
+
+    two_images_same = np.array([img, img])
+    two_images_preprocessed = np.array([img, img_preprocessed])
 
     request = client.send_task(img)
     result = client.get_task_result(request)
@@ -118,7 +121,7 @@ if __name__ == "__main__":
     result = client.get_task_result(request)
     print(f"OUTPUT0_DATA: {result}, shape: {result.shape}")
 
-    request = client.send_task(two_images_crazy)
+    request = client.send_task(two_images_preprocessed)
     result = client.get_task_result(request)
     print(f"OUTPUT0_DATA: {result}, shape: {result.shape}")
 
